@@ -97,14 +97,15 @@ function hapus(id){
 }
 
 function buat_tombol(){
-	var isi = '';
-		for (var i = 0; i < arr_time.length; i++){
-		var no = (i+1)+'. ';
-		var id = arr_time[i];    var innerText = Number(arr_time[i].split('|')[0]).toFixed(2)+'-'+Number(arr_time[i].split('|')[1]).toFixed(2);    var href = "javascript:playSegment("+arr_time[i].split('|')[0]+","+arr_time[i].split('|')[1]+");";    var a = no+'<a id='+id+' href="'+href+'">'+innerText+'</a>&nbsp;<button id="d_'+id+'" onclick="hapus(this.id)">X</button><br><br>';
-		isi +=a;
+	var isi = '',lanjut ='';
+		if(arr_time.length!=''){
+			for (var i = 0; i < arr_time.length; i++){
+			var no = (i+1)+'. ';
+			var id = arr_time[i];    var innerText = Number(arr_time[i].split('|')[0]).toFixed(2)+'-'+Number(arr_time[i].split('|')[1]).toFixed(2);    var href = "javascript:playSegment("+arr_time[i].split('|')[0]+","+arr_time[i].split('|')[1]+");";    var a = no+'<a id='+id+' href="'+href+'">'+innerText+'</a>&nbsp;<button id="d_'+id+'" onclick="hapus(this.id)">X</button><br><br>';
+			isi +=a;
+			}
+		lanjut = "<button onclick=playSegment("+arr_time[arr_time.length - 1].split('|')[1]+","+audio.duration+");>Lanjut</button><br>";
 		}
-		var lanjut = "<button onclick=playSegment("+arr_time[arr_time.length - 1].split('|')[1]+","+audio.duration+");>Lanjut</button><br>";
-		
 	return isi+lanjut;
 }
 
