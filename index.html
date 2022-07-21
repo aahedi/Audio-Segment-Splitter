@@ -1,0 +1,120 @@
+<!doctypehtml><html lang=en><meta charset=UTF-8><meta content="width=device-width,initial-scale=1"name=viewport><meta content="ie=edge"http-equiv=X-UA-Compatible>
+<body style="text-align:center;">
+<audio id="sample" src="Abdurrahman_Al_Ausy/001-Al-Fatihah.mp3" controls preload></audio>
+<div><span id="timer">00:00</span></div>
+<br>
+<div id="part" style="height:220px;overflow-x:hidden;overflow-y:auto;border:#000 1px solid;padding:10px;margin:10px;"></div>
+<br>
+<button id="Play_Pause">Play</button>&nbsp;&nbsp;&nbsp;<button onclick="potong();">Split</button>&nbsp;&nbsp;&nbsp;<button id="copy_btn" onclick="salin();">Copy (0)</button>
+<br><br>
+<script>
+var files = ["114-An-Naas.mp3","113-Al-Falaq.mp3","112-Al-Ikhlas.mp3","111-Al-Lahab.mp3","110-An-Nasr.mp3","109-Al-Kaafirun.mp3","108-Al-Kautsar.mp3","107-Al-Mauun.mp3","106-Al-Quraisy.mp3","105-Al-Fil.mp3","104-Al-Humazah.mp3","103-Al-Ashr.mp3","102-At-Takatsur.mp3","101-Al-Qaariah.mp3","100-Al-Aadiyaat.mp3","099-Al-Zalzalah.mp3","098-Al-Bayyinah.mp3","097-Al-Qadr.mp3","096-Al-Alaq.mp3","095-At-Tiin.mp3","094-Alam-Nasyrah.mp3","093-Adh-Dhuhaa.mp3","092-Al-Lail.mp3","091-Asy-Syams.mp3","090-Al-Balad.mp3","089-Al-Fajr.mp3","088-Al-Ghaasyiyah.mp3","087-Al-Alaa.mp3","086-Ath-Thaariq.mp3","085-Al-Buruuj.mp3","084-Al-Insyiqaaq.mp3","083-Al-Muthaffifin.mp3","082-Al-Infithaar.mp3","081-At-Takwiir.mp3","080-Abasa.mp3","079-An-Naaziaat.mp3","078-An-Naba.mp3","077-Al-Mursalaat.mp3","076-Al-Insaan.mp3","075-Al-Qiyaamah.mp3","074-Al-Muddatstsir.mp3","073-Al-Muzzammil.mp3","072-Al-Jin.mp3","071-Nuh.mp3","070-Al-Maaarij.mp3","069-Al-Haaqqah.mp3","068-Al-Qalam.mp3","067-Al-Mulk.mp3","066-At-Tahrim.mp3","065-Ath-Thalaaq.mp3","064-At-Taghaabun.mp3","063-Al-Munaafiquun.mp3","062-Al-Jumuah.mp3","061-Ash-Shaff.mp3","060-Al-Mumtahanah.mp3","059-Al-Hasyr.mp3","058-Al-Mujaadilah.mp3","057-Al-Hadiid.mp3","056-Al-Waaqiah.mp3","055-Ar-Rahmaan.mp3","054-Al-Qamar.mp3","053-An-Najm.mp3","052-Ath-Thuur.mp3","051-Adz-Dzaariyaat.mp3","050-Qaaf.mp3","049-Al-Hujuraat.mp3","048-Al-Fath.mp3","047-Muhammad.mp3","046-Al-Ahqaaf.mp3","045-Al-Jaatsiyah.mp3","044-Ad-Dukhaan.mp3","043-Az-Zukhruf.mp3","042-Asy-Syuura.mp3","041-Fushshilat.mp3","040-Al-Mumin.mp3","039-Az-Zumar.mp3","038-Shaad.mp3","037-Ash-Shaaffaat.mp3","036-Yaasiin.mp3","035-Faathir.mp3","034-Saba.mp3","033-Al-Ahzab.mp3","032-As-Sajdah.mp3","031-Luqman.mp3","030-Ar-Ruum.mp3","029-Al-Ankabuut.mp3","028-Al-Qashash.mp3","027-An-Naml.mp3","026-Asy-Syuaraa.mp3","025-Al-Furqaan.mp3","024-An-Nuur.mp3","023-Al-Muminuun.mp3","022-Al-Hajj.mp3","021-Al-Anbiya.mp3","020-Thaha.mp3","019-Maryam.mp3","018-Al-Kahf.mp3","017-Al-Isra.mp3","016-An-Nahl.mp3","015-Al-Hijr.mp3","014-Ibrahim.mp3","013-Ar-Rad.mp3","012-Yusuf.mp3","011-Hud.mp3","010-Yunus.mp3","009-At-Taubah.mp3","008-Al-Anfal.mp3","007-Al-Araf.mp3","006-Al-Anam.mp3","005-Al-Maidah.mp3","004-An-Nisa.mp3","003-Ali-Imran.mp3","002-Al-Baqarah.mp3","001-Al-Fatihah.mp3"]
+
+function pilihan_surat() {
+  var buttonStyle = "Pilih Surat";
+  var dv = document["createElement"]("div");
+  var dv_select = document["createElement"]("select");
+  dv_select["id"] = "surat";
+  dv_select["setAttribute"]("style", "font-size: 19px;");
+  dv_select["setAttribute"]("onchange", "document.getElementById('sample').src=this.value;empty_arr();");
+  dv["appendChild"](dv_select);
+  var buttons = document["createElement"]("option");
+  buttons["setAttribute"]("selected", "true");
+  buttons["setAttribute"]("disabled", "disabled");
+  buttons["text"] = buttonStyle;
+  dv_select["appendChild"](buttons);
+  var i = 0;
+  for (; i < files["length"]; i++) {
+    var el = document["createElement"]("option");
+    el["value"] = 'Abdurrahman_Al_Ausy/'+files[i];
+    el["text"] = files[i];
+    dv_select["appendChild"](el);
+  }
+  return outerHTML(dv);
+}
+
+document.body.innerHTML += pilihan_surat();
+
+var audio = document.getElementById('sample');
+var segmentEnd;
+var arr_time = [];
+
+audio.addEventListener('timeupdate', function (){if (segmentEnd && audio.currentTime >= segmentEnd) {    audio.pause();}   document.getElementById('timer').innerHTML=audio.currentTime;
+}, false);
+
+function empty_arr(){
+	arr_time = [];
+}
+
+function salin(){
+	var text = '['+arr_time.toString()+']';
+	navigator.clipboard.writeText(text).then(function() {
+	  console.log('Async: Copying to clipboard was successful!');
+	}, function(err) {
+	  console.error('Async: Could not copy text: ', err);
+	});
+}
+
+function potong(){
+	var mulai = 0;
+	var akhir = document.getElementById('timer').textContent;
+	if(arr_time.length < 1 == true){
+	mulai = 0;
+	}else{
+	mulai = arr_time[arr_time.length - 1].split('|')[1]; //array terakhir
+	}
+	arr_time.push(mulai+'|'+akhir);
+	
+	var element = document.getElementById('part');element.innerHTML =  buat_tombol();
+	element.scrollTop = element.scrollHeight;
+	document.getElementById('copy_btn').innerText = 'Copy ('+arr_time.length+')';
+}
+
+function test(){
+	var element = document.getElementById('part');element.innerHTML =  buat_tombol();
+	element.scrollTop = element.scrollHeight;
+	document.getElementById('copy_btn').innerText = 'Copy ('+arr_time.length+')';
+}
+
+function outerHTML(elm) {
+  return elm["outerHTML"] || new XMLSerializer()["serializeToString"](elm);
+}
+
+function removeA(arr) {var what, a = arguments, L = a.length, ax;while (L > 1 && arr.length) {    what = a[--L];    while ((ax= arr.indexOf(what)) !== -1) {        arr.splice(ax, 1);    }}return arr;
+}
+
+function hapus(id){
+	var myid = id.replace('d_','');
+	document.getElementById(myid).remove();
+	document.getElementById(id).nextSibling.remove();
+	document.getElementById(id).remove();
+	
+	removeA(arr_time,myid);
+	document.getElementById('part').innerHTML =  buat_tombol();
+	document.getElementById('copy_btn').innerText = 'Copy ('+arr_time.length+')';
+}
+
+function buat_tombol(){
+	var isi = '';
+		for (var i = 0; i < arr_time.length; i++){
+		var no = (i+1)+'. ';
+		var id = arr_time[i];    var innerText = Number(arr_time[i].split('|')[0]).toFixed(2)+'-'+Number(arr_time[i].split('|')[1]).toFixed(2);    var href = "javascript:playSegment("+arr_time[i].split('|')[0]+","+arr_time[i].split('|')[1]+");";    var a = no+'<a id='+id+' href="'+href+'">'+innerText+'</a>&nbsp;<button id="d_'+id+'" onclick="hapus(this.id)">X</button><br><br>';
+		isi +=a;
+		}
+		var lanjut = "<button onclick=playSegment("+arr_time[arr_time.length - 1].split('|')[1]+","+audio.duration+");>Lanjut</button><br>";
+		
+	return isi+lanjut;
+}
+
+function playSegment(startTime, endTime){segmentEnd = endTime;audio.currentTime = startTime;audio.play();
+}
+
+window.addEventListener ("DOMContentLoaded",handleWindowLoad);
+function handleWindowLoad ()
+{
+	var PlayButton = document.getElementById('Play_Pause');PlayButton.addEventListener ( "click", Play_Pause_Video ) ;
+function Play_Pause_Video (){    if (audio.paused === true)    {        audio.play();        PlayButton.innerHTML = "Pause";    }    else    {        audio.pause();        PlayButton.innerHTML = "Play";    }}
+}
+</script>
+</body>
+</html>
