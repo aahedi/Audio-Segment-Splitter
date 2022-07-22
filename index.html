@@ -1,9 +1,20 @@
 <!doctypehtml><html lang=en><meta charset=UTF-8><meta content="width=device-width,initial-scale=1"name=viewport><meta content="ie=edge"http-equiv=X-UA-Compatible>
+<head>
+<style>
+html {
+  scroll-behavior: smooth;
+}
+.nomor{
+  width:30px;
+  display: inline-block;
+}
+</style>
+</head>
 <body style="text-align:center;">
 <audio id="sample" src="Abdurrahman_Al_Ausy/001-Al-Fatihah.mp3" controls preload></audio>
 <div><span id="timer">00:00</span></div>
 <br>
-<div id="part" style="height:220px;overflow-x:hidden;overflow-y:auto;border:#000 1px solid;padding:10px;margin:10px;"></div>
+<div id="part" style="height:220px;overflow-x:hidden;overflow-y:auto;border:#000 1px solid;padding: 10px 10px 10px 35px;text-align: left;margin:10px;"></div>
 <br>
 <button id="Play_Pause">Play</button>&nbsp;&nbsp;&nbsp;<button onclick="potong();">Split</button>&nbsp;&nbsp;&nbsp;<button id="copy_btn" onclick="salin();">Copy (0)</button>
 <br><br>
@@ -96,22 +107,47 @@ function hapus(id){
 	document.getElementById('copy_btn').innerText = 'Copy ('+arr_time.length+')';
 }
 
+function edit(id,new_val){
+	//console.log('id: '+id+' => new_val: '+new_val);
+	var str = arr_time.toString();
+	var newstr = new_val.replaceAll('-','|');
+	var temp = str.replaceAll(id,newstr);
+	arr_time = temp.split(',');
+	
+	localStorage.setItem('posisi',document.getElementById('part').scrollTop);
+	
+	var element = document.getElementById('part');element.innerHTML =  buat_tombol();
+	document.getElementById('copy_btn').innerText = 'Copy ('+arr_time.length+')';
+	
+    setTimeout(function () {
+		document.getElementById('part').scrollTop = localStorage.getItem('posisi');
+    }, 100);
+}
+
 function buat_tombol(){
 	var isi = '',lanjut ='';
 		if(arr_time.length!=''){
 			for (var i = 0; i < arr_time.length; i++){
 			var no = (i+1)+'. ';
-			var id = arr_time[i];    var innerText = Number(arr_time[i].split('|')[0]).toFixed(2)+'-'+Number(arr_time[i].split('|')[1]).toFixed(2);    var href = "javascript:playSegment("+arr_time[i].split('|')[0]+","+arr_time[i].split('|')[1]+");";    var a = no+'<a id='+id+' href="'+href+'">'+innerText+'</a>&nbsp;<button id="d_'+id+'" onclick="hapus(this.id)">X</button><br><br>';
+			var id = arr_time[i];
+			var innerText = Number(arr_time[i].split('|')[0])+'-'+Number(arr_time[i].split('|')[1]);
+			var ply = "playSegment("+arr_time[i].split('|')[0]+","+arr_time[i].split('|')[1]+");";
+			var href = "javascript:;";
+			var a = '<span class="nomor">'+no+'</span><a id='+id+' href="'+href+'" onclick=document.getElementById("sample").pause() oninput="edit(this.id,this.textContent)" contenteditable="true">'+innerText+'</a>&nbsp;&nbsp;<button id="p_'+id+'" onclick="'+ply+'">Play</button>&nbsp;&nbsp;<button id="d_'+id+'" onclick="hapus(this.id)">X</button><br><br>';
 			isi +=a;
 			}
-		lanjut = "<button onclick=playSegment("+arr_time[arr_time.length - 1].split('|')[1]+","+audio.duration+");>Lanjut</button><br>";
+		lanjut = "<button style='margin:0 auto;display:block;' onclick=playSegment("+arr_time[arr_time.length - 1].split('|')[1]+","+audio.duration+");>Lanjut</button><br>";
 		}
 	return isi+lanjut;
 }
 
 function playSegment(startTime, endTime){segmentEnd = endTime;audio.currentTime = startTime;audio.play();
 }
-
+/*
+document.getElementById('part').addEventListener("scroll", event => {
+localStorage.setItem('posisi',document.getElementById('part').scrollTop);
+}, { passive: true });
+*/
 window.addEventListener ("DOMContentLoaded",handleWindowLoad);
 function handleWindowLoad ()
 {
